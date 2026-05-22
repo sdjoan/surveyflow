@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="SurveyFlow — 설문 설계부터 보고서 초안까지 자동화하는 컨설팅 업무 자동화 플랫폼">
+<title>SurveyFlow — 컨설팅 업무 자동화 플랫폼</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0e1a;--bg2:#111827;--bg3:#1a2235;
+  --card:#141c2e;--card2:#1e2a40;
+  --border:rgba(99,179,237,0.12);
+  --text:#e8edf5;--text2:#8fa3c0;--text3:#5a7290;
+  --accent:#4f9cf9;--accent2:#38bdf8;--accent3:#06b6d4;
+  --grad:linear-gradient(135deg,#4f9cf9,#06b6d4);
+  --green:#34d399;--amber:#fbbf24;--red:#f87171;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;line-height:1.7;overflow-x:hidden}
+
+/* ── NAV ─────────────────────────── */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,14,26,0.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 2rem}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px}
+.nav-logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.25rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.5px}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:.875rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--accent2)}
+.nav-badge{background:rgba(79,156,249,0.12);border:1px solid rgba(79,156,249,0.3);color:var(--accent2);font-size:.75rem;padding:4px 12px;border-radius:20px;font-weight:500}
+
+/* ── HERO ────────────────────────── */
+#hero{min-height:88vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 4rem;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(79,156,249,0.1) 0%,transparent 70%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(99,179,237,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(99,179,237,0.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+.hero-inner{position:relative;max-width:760px;margin:0 auto}
+.hero-chip{display:inline-flex;align-items:center;gap:8px;background:rgba(79,156,249,0.1);border:1px solid rgba(79,156,249,0.25);color:var(--accent2);padding:6px 16px;border-radius:20px;font-size:.8rem;font-weight:500;margin-bottom:2rem;letter-spacing:.5px}
+.hero-chip span{width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block;box-shadow:0 0 6px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(2.4rem,6vw,4rem);font-weight:800;line-height:1.12;letter-spacing:-1.5px;margin-bottom:1.25rem}
+.hero-title .grad{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:1.05rem;color:var(--text2);max-width:520px;margin:0 auto 2.5rem;line-height:1.8}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--grad);color:#fff;padding:12px 28px;border-radius:10px;font-weight:700;font-size:.95rem;text-decoration:none;transition:opacity .2s}
+.btn-primary:hover{opacity:.85}
+.btn-ghost{background:transparent;border:1px solid rgba(99,179,237,0.3);color:var(--text2);padding:12px 28px;border-radius:10px;font-weight:500;font-size:.95rem;text-decoration:none;transition:all .2s}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent2)}
+.hero-stats{display:flex;gap:3rem;justify-content:center;margin-top:4rem;padding-top:3rem;border-top:1px solid var(--border);flex-wrap:wrap}
+.stat-item{text-align:center}
+.stat-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.75rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:.78rem;color:var(--text3);margin-top:2px;letter-spacing:.5px}
+
+/* ── SECTION COMMON ──────────────── */
+section{padding:6rem 2rem}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-tag{font-size:.75rem;font-weight:600;letter-spacing:1.5px;color:var(--accent);text-transform:uppercase;margin-bottom:1rem}
+.section-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;line-height:1.2;letter-spacing:-1px;margin-bottom:1rem}
+.section-desc{color:var(--text2);font-size:1rem;max-width:540px;line-height:1.8;margin-bottom:3rem}
+
+/* ── EFFECTS (기대효과) ───────────── */
+#effects{background:var(--bg2)}
+.effects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:1.25rem}
+.effect-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.75rem;transition:border-color .25s,transform .25s}
+.effect-card:hover{border-color:rgba(79,156,249,0.35);transform:translateY(-3px)}
+.effect-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.25rem}
+.ic-blue{background:rgba(79,156,249,0.12)}
+.ic-teal{background:rgba(6,182,212,0.12)}
+.ic-green{background:rgba(52,211,153,0.12)}
+.ic-amber{background:rgba(251,191,36,0.12)}
+.effect-title{font-weight:700;font-size:1rem;margin-bottom:.5rem;color:var(--text)}
+.effect-desc{font-size:.875rem;color:var(--text2);line-height:1.7}
+
+/* ── BACKGROUND (추진배경) ───────── */
+#background{background:var(--bg)}
+.bg-list{display:flex;flex-direction:column;gap:1rem}
+.bg-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem 1.75rem;display:flex;gap:1.5rem;align-items:flex-start;transition:border-color .2s}
+.bg-item:hover{border-color:rgba(248,113,113,0.3)}
+.bg-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:2rem;font-weight:800;color:rgba(248,113,113,0.25);line-height:1;flex-shrink:0;min-width:48px}
+.bg-content h3{font-weight:700;font-size:1rem;margin-bottom:.35rem;color:var(--text)}
+.bg-content p{font-size:.875rem;color:var(--text2);line-height:1.7}
+.bg-tag{display:inline-block;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.2);color:#f87171;font-size:.72rem;padding:2px 10px;border-radius:20px;font-weight:600;margin-top:.5rem}
+
+/* ── GOALS (목표) ────────────────── */
+#goals{background:var(--bg2)}
+.goals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(460px,1fr));gap:1.5rem}
+.goal-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2.25rem;position:relative;overflow:hidden}
+.goal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad)}
+.goal-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:3.5rem;font-weight:800;color:rgba(79,156,249,0.1);line-height:1;margin-bottom:1rem}
+.goal-icon{font-size:2rem;margin-bottom:1rem;display:block}
+.goal-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.25rem;font-weight:700;margin-bottom:.75rem}
+.goal-desc{font-size:.875rem;color:var(--text2);line-height:1.8;margin-bottom:1.25rem}
+.goal-features{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.goal-features li{font-size:.85rem;color:var(--text2);padding-left:1.25rem;position:relative}
+.goal-features li::before{content:'';position:absolute;left:0;top:.55em;width:6px;height:6px;background:var(--grad);border-radius:50%}
+
+/* ── FEATURES (주요기능) ─────────── */
+#features{background:var(--bg)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.feat-badge{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:var(--grad);border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.9rem;color:#fff;margin-bottom:1rem}
+.feat-title{font-weight:700;font-size:.95rem;margin-bottom:.5rem}
+.feat-desc{font-size:.825rem;color:var(--text2);line-height:1.7}
+.feat-highlight{display:inline-block;margin-top:.75rem;font-size:.75rem;font-weight:700;color:var(--green);letter-spacing:.5px}
+
+/* ── STACK (기술스택) ────────────── */
+#stack{background:var(--bg2);padding:3rem 2rem}
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+.stack-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem}
+.stack-label{font-size:.72rem;font-weight:600;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:.5rem}
+.stack-items{font-size:.875rem;color:var(--text2);line-height:1.8}
+
+/* ── ROADMAP ─────────────────────── */
+#roadmap{background:var(--bg)}
+.roadmap-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem}
+.rm-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.rm-period{font-size:.78rem;font-weight:600;color:var(--accent);margin-bottom:.5rem;letter-spacing:.5px}
+.rm-phase{font-weight:700;font-size:.95rem;margin-bottom:.75rem}
+.rm-items{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.rm-items li{font-size:.8rem;color:var(--text2);padding-left:1rem;position:relative}
+.rm-items li::before{content:'→';position:absolute;left:0;color:var(--accent3);font-size:.75rem}
+.rm-done{border-color:rgba(52,211,153,0.25)}
+.rm-done .rm-period{color:var(--green)}
+.rm-active{border-color:rgba(79,156,249,0.35);box-shadow:0 0 20px rgba(79,156,249,0.08)}
+
+/* ── FOOTER ──────────────────────── */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:2.5rem 2rem;text-align:center}
+.footer-logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.1rem;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem}
+.footer-sub{font-size:.825rem;color:var(--text3)}
+
+/* ── RESPONSIVE ──────────────────── */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hero-stats{gap:1.5rem}
+  .goals-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">SurveyFlow</span>
+    <ul class="nav-links">
+      <li><a href="#effects">기대효과</a></li>
+      <li><a href="#background">추진배경</a></li>
+      <li><a href="#goals">목표</a></li>
+      <li><a href="#features">주요기능</a></li>
+      <li><a href="#roadmap">로드맵</a></li>
+    </ul>
+    <span class="nav-badge">v1.0 기획</span>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-chip">
+      <span></span>
+      컨설팅 업무 자동화 플랫폼
+    </div>
+    <h1 class="hero-title">
+      설문 설계부터<br>
+      <span class="grad">보고서 초안까지</span><br>
+      클릭 몇 번으로 완성
+    </h1>
+    <p class="hero-sub">ISP/ISMP 컨설턴트의 현황조사 업무를 하나의 플랫폼으로 통합.<br>설문 빌더 → 응답 수집 → AI 분석 → 보고서 자동 생성</p>
+    <div class="hero-btns">
+      <a href="#effects" class="btn-primary">기대효과 확인 →</a>
+      <a href="#features" class="btn-ghost">주요 기능 보기</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">70%</div>
+        <div class="stat-label">업무 시간 단축</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">5가지</div>
+        <div class="stat-label">핵심 자동화 모듈</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">NIA</div>
+        <div class="stat-label">표준 양식 내장</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">RAG</div>
+        <div class="stat-label">AI 지식베이스 연동</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 기대효과 ── -->
+<section id="effects">
+  <div class="section-inner">
+    <div class="section-tag">✦ Expected Effects</div>
+    <h2 class="section-title">도입 시 기대효과</h2>
+    <p class="section-desc">SurveyFlow 도입으로 컨설턴트가 체감하는 6가지 핵심 변화입니다.</p>
+    <div class="effects-grid">
+      <div class="effect-card">
+        <div class="effect-icon ic-blue">⏱️</div>
+        <div class="effect-title">업무 시간 70% 단축</div>
+        <div class="effect-desc">설문 제작 2~4시간 → 30분 이내. 보고서 초안 1~2일 → 4시간 이내로 전체 워크플로우를 압축합니다.</div>
+      </div>
+      <div class="effect-card">
+        <div class="effect-icon ic-teal">📋</div>
+        <div class="effect-title">산출물 품질 균일화</div>
+        <div class="effect-desc">NIA ISP/ISMP 가이드 제7판 기반 표준 템플릿 내장으로 컨설턴트 역량 편차 없이 일정 수준의 산출물을 보장합니다.</div>
+      </div>
+      <div class="effect-card">
+        <div class="effect-icon ic-green">🤖</div>
+        <div class="effect-title">AI 기반 응답 분석</div>
+        <div class="effect-desc">주관식 응답의 감성분석·키워드 추출·자동 요약으로 분석에 투입되는 시간을 90% 이상 절감합니다.</div>
+      </div>
+      <div class="effect-card">
+        <div class="effect-icon ic-amber">📊</div>
+        <div class="effect-title">자동 시각화 차트</div>
+        <div class="effect-desc">응답 데이터가 수집되는 즉시 교차분석·리커트 분포·워드클라우드 등 차트가 자동 생성됩니다.</div>
+      </div>
+      <div class="effect-card">
+        <div class="effect-icon ic-blue">📄</div>
+        <div class="effect-title">보고서 초안 자동 생성</div>
+        <div class="effect-desc">분석 결과가 NIA 산출물 양식에 맞춘 Word/PDF 보고서로 즉시 변환. AI 코멘트와 시사점이 섹션별로 자동 삽입됩니다.</div>
+      </div>
+      <div class="effect-card">
+        <div class="effect-icon ic-teal">🧠</div>
+        <div class="effect-title">지식 자산 축적</div>
+        <div class="effect-desc">누적 설문·분석 데이터가 RAG 지식베이스로 저장되어 유사 프로젝트 사례를 챗봇으로 즉시 검색·재활용합니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 추진배경 ── -->
+<section id="background">
+  <div class="section-inner">
+    <div class="section-tag">⚡ Why We Build</div>
+    <h2 class="section-title">추진 배경</h2>
+    <p class="section-desc">ISP/ISMP 현황조사 단계에서 반복되는 5가지 핵심 문제입니다.</p>
+    <div class="bg-list">
+      <div class="bg-item">
+        <div class="bg-num">01</div>
+        <div class="bg-content">
+          <h3>설문지 반복 제작</h3>
+          <p>매 프로젝트마다 한글·Excel로 설문지를 처음부터 작성합니다. 표준 템플릿 없이 개인 역량에 의존하다 보니 품질 편차가 크고 2~4시간이 낭비됩니다.</p>
+          <span class="bg-tag">하루 2~4시간 낭비</span>
+        </div>
+      </div>
+      <div class="bg-item">
+        <div class="bg-num">02</div>
+        <div class="bg-content">
+          <h3>응답 수동 집계</h3>
+          <p>이메일·출력물로 수집한 응답을 Excel에 수작업으로 입력·집계합니다. 오류와 누락이 발생하고 데이터 정합성 유지에 과도한 시간이 소요됩니다.</p>
+          <span class="bg-tag">오류·누락 빈번 발생</span>
+        </div>
+      </div>
+      <div class="bg-item">
+        <div class="bg-num">03</div>
+        <div class="bg-content">
+          <h3>분석 결과 시각화 부재</h3>
+          <p>Excel 차트를 개별로 작성하고 표준화된 시각화 포맷이 없어 프로젝트마다 다른 형식의 차트가 제출됩니다.</p>
+          <span class="bg-tag">일관성 없는 보고</span>
+        </div>
+      </div>
+      <div class="bg-item">
+        <div class="bg-num">04</div>
+        <div class="bg-content">
+          <h3>보고서 초안 수동 작성</h3>
+          <p>분석 결과를 Word에 수동 복사·편집하는 작업이 1~2일 소요됩니다. 반복적인 서식 정리와 그림 삽입에 고급 인력이 낭비됩니다.</p>
+          <span class="bg-tag">초안 작성 1~2일 소요</span>
+        </div>
+      </div>
+      <div class="bg-item">
+        <div class="bg-num">05</div>
+        <div class="bg-content">
+          <h3>지식 재활용 불가</h3>
+          <p>프로젝트별 설문 데이터가 개인 PC에 분산 저장되어 퇴사 시 소멸합니다. 유사 프로젝트 레퍼런스를 매번 처음부터 조사합니다.</p>
+          <span class="bg-tag">조직 지식 단절</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 목표 ── -->
+<section id="goals">
+  <div class="section-inner">
+    <div class="section-tag">🎯 Our Goals</div>
+    <h2 class="section-title">프로젝트 목표</h2>
+    <p class="section-desc">SurveyFlow가 달성하고자 하는 두 가지 핵심 목표입니다.</p>
+    <div class="goals-grid">
+      <div class="goal-card">
+        <div class="goal-num">01</div>
+        <span class="goal-icon">⚙️</span>
+        <h3 class="goal-title">현황조사 워크플로우 완전 자동화</h3>
+        <p class="goal-desc">설문 설계부터 보고서 초안까지 전 과정을 단일 플랫폼에서 끊김 없이 처리. 반복 수작업을 제거하고 컨설턴트가 고부가 분석에 집중할 수 있는 환경을 만듭니다.</p>
+        <ul class="goal-features">
+          <li>설문 빌더 — NIA 표준 문항 유형 완전 지원</li>
+          <li>배포 링크 자동 생성 및 실시간 응답 집계</li>
+          <li>AI 분석 엔진 — 감성분석·키워드·교차분석</li>
+          <li>Word/PDF 보고서 1시간 내 자동 생성</li>
+        </ul>
+      </div>
+      <div class="goal-card">
+        <div class="goal-num">02</div>
+        <span class="goal-icon">🧠</span>
+        <h3 class="goal-title">컨설팅 지식을 조직 자산으로 전환</h3>
+        <p class="goal-desc">개인 PC에 묻혀 있던 설문·분석 데이터를 벡터DB 지식베이스에 축적하고, RAG 챗봇으로 언제든 재검색·재활용할 수 있는 조직 지식 인프라를 구축합니다.</p>
+        <ul class="goal-features">
+          <li>ChromaDB 기반 프로젝트 지식 자동 아카이빙</li>
+          <li>RAG 챗봇 — "이 설문 결과의 시사점은?" 질의 가능</li>
+          <li>유사 프로젝트 사례 자동 추천</li>
+          <li>지식베이스 기반 문항 자동 추천</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 주요기능 ── -->
+<section id="features">
+  <div class="section-inner">
+    <div class="section-tag">🛠 Core Features</div>
+    <h2 class="section-title">5대 핵심 모듈</h2>
+    <p class="section-desc">설문 → 수집 → 분석 → 보고서 → 지식베이스까지 이어지는 자동화 파이프라인입니다.</p>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-badge">①</div>
+        <div class="feat-title">설문 빌더</div>
+        <div class="feat-desc">NIA ISP 표준 템플릿 기반 문항 설계 마법사. 객관식·주관식·리커트·매트릭스 유형 지원. 배포 링크·QR 자동 생성.</div>
+        <span class="feat-highlight">↑ 제작 시간 80% 단축</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-badge">②</div>
+        <div class="feat-title">응답 수집 엔진</div>
+        <div class="feat-desc">웹폼 실시간 수집, 모바일 최적화 UI, 응답 현황 대시보드. 마감일 설정 및 미응답 자동 리마인더.</div>
+        <span class="feat-highlight">↑ 수작업 집계 완전 제거</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-badge">③</div>
+        <div class="feat-title">AI 분석 엔진</div>
+        <div class="feat-desc">GPT-4o 기반 주관식 감성분석·키워드 추출. 교차분석·빈도분석 자동 수행. 시각화 차트 즉시 생성.</div>
+        <span class="feat-highlight">↑ 분석 시간 90% 단축</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-badge">④</div>
+        <div class="feat-title">보고서 자동 생성</div>
+        <div class="feat-desc">분석 결과를 NIA 양식 Word/PDF로 자동 변환. 섹션별 AI 코멘트·시사점 자동 삽입. 한 번 클릭으로 완성.</div>
+        <span class="feat-highlight">↑ 초안 1시간 내 생성</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-badge">⑤</div>
+        <div class="feat-title">RAG 지식베이스</div>
+        <div class="feat-desc">누적 설문·분석 데이터를 벡터DB에 저장. LangChain 기반 RAG 챗봇으로 유사 사례 검색·참고.</div>
+        <span class="feat-highlight">↑ 프로젝트 지식 재활용</span>
+      </div>
+      <div class="feat-card" style="border-color:rgba(79,156,249,0.25);background:rgba(79,156,249,0.05)">
+        <div class="feat-badge">+</div>
+        <div class="feat-title">일간 브리핑 대시보드</div>
+        <div class="feat-desc">진행 중인 설문 현황, 응답률 추이, 미완료 항목 알림, 보고서 생성 이력을 한 화면에서 모니터링.</div>
+        <span class="feat-highlight" style="color:#38bdf8">↑ 프로젝트 전체 가시성 확보</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 기술스택 ── -->
+<section id="stack">
+  <div class="section-inner">
+    <div class="section-tag">⚙️ Tech Stack</div>
+    <h2 class="section-title" style="font-size:1.6rem;margin-bottom:1.5rem">기술 스택</h2>
+    <div class="stack-grid">
+      <div class="stack-card"><div class="stack-label">Frontend</div><div class="stack-items">React + TypeScript<br>Recharts · TailwindCSS</div></div>
+      <div class="stack-card"><div class="stack-label">Backend</div><div class="stack-items">FastAPI (Python)<br>Celery · Redis</div></div>
+      <div class="stack-card"><div class="stack-label">AI / ML</div><div class="stack-items">OpenAI GPT-4o<br>LangChain · RAG</div></div>
+      <div class="stack-card"><div class="stack-label">Database</div><div class="stack-items">PostgreSQL<br>ChromaDB (벡터DB)</div></div>
+      <div class="stack-card"><div class="stack-label">문서 생성</div><div class="stack-items">python-docx (Word)<br>ReportLab (PDF)</div></div>
+      <div class="stack-card"><div class="stack-label">Infra</div><div class="stack-items">AWS EC2 · S3<br>Docker · GitHub Actions</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 로드맵 ── -->
+<section id="roadmap">
+  <div class="section-inner">
+    <div class="section-tag">🗓 Roadmap</div>
+    <h2 class="section-title">개발 로드맵</h2>
+    <p class="section-desc" style="margin-bottom:2rem">5단계 개발 계획으로 M1부터 M8+ 까지 단계적으로 출시합니다.</p>
+    <div class="roadmap-list">
+      <div class="rm-card rm-done">
+        <div class="rm-period">M1~M2</div>
+        <div class="rm-phase">1단계 · 기획·설계</div>
+        <ul class="rm-items">
+          <li>요구사항 정의</li>
+          <li>UI/UX 프로토타입</li>
+          <li>DB 스키마 설계</li>
+          <li>기술 스택 확정</li>
+        </ul>
+      </div>
+      <div class="rm-card rm-active">
+        <div class="rm-period">M2~M4</div>
+        <div class="rm-phase">2단계 · MVP 개발</div>
+        <ul class="rm-items">
+          <li>설문 빌더 v1</li>
+          <li>응답 수집 엔진</li>
+          <li>기본 차트 시각화</li>
+          <li>간이 보고서 생성</li>
+        </ul>
+      </div>
+      <div class="rm-card">
+        <div class="rm-period">M4~M6</div>
+        <div class="rm-phase">3단계 · AI 고도화</div>
+        <ul class="rm-items">
+          <li>AI 분석 엔진</li>
+          <li>NIA 양식 보고서</li>
+          <li>RAG 챗봇 v1</li>
+          <li>감성분석·키워드</li>
+        </ul>
+      </div>
+      <div class="rm-card">
+        <div class="rm-period">M6~M8</div>
+        <div class="rm-phase">4단계 · 베타 출시</div>
+        <ul class="rm-items">
+          <li>베타 서비스 오픈</li>
+          <li>피드백 수집</li>
+          <li>성능 최적화</li>
+          <li>보안 점검</li>
+        </ul>
+      </div>
+      <div class="rm-card">
+        <div class="rm-period">M8~</div>
+        <div class="rm-phase">5단계 · 정식 운영</div>
+        <ul class="rm-items">
+          <li>정식 서비스 출시</li>
+          <li>엔터프라이즈 영업</li>
+          <li>기능 고도화</li>
+          <li>KPI 달성 모니터링</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">SurveyFlow</div>
+  <div class="footer-sub">컨설팅 업무 자동화 플랫폼 · 기획서 v1.0 · 2025년 5월</div>
+</footer>
+
+</body>
+</html>
